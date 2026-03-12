@@ -80,7 +80,7 @@ function App(){
   const [total,setTotal]         = useState(0);
   const [leaderboard,setLeaderboard] = useState([]);
   const [athletes,setAthletes]   = useState({});
-  const [raceLabel,setRaceLabel] = useState("P2P Challenge – Paarl to Franschhoek");
+  const [raceLabel,setRaceLabel] = useState("Pass2Pass Ultra Trail");
   const [tab,setTab]             = useState("shifts");
   const [errorMsg,setErrorMsg]   = useState("");
   // elevation: { [cpName]: metres }
@@ -710,8 +710,24 @@ function App(){
       </>)}
 
       {!isLoading&&loadedCount===0&&phase!=="error"&&(
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",padding:60,color:"#1e3a5f",fontFamily:"Barlow Condensed,sans-serif",fontSize:16,letterSpacing:"0.1em"}}>
-          {phase==="idle"?"LOADING…":"ENTER A RACE ID AND CLICK LOAD"}
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:60,gap:24}}>
+          {phase==="idle"?(
+            <div style={{color:"#1e3a5f",fontFamily:"Barlow Condensed,sans-serif",fontSize:16,letterSpacing:"0.1em"}}>LOADING…</div>
+          ):(
+            <>
+              <div style={{color:"#638EB0",fontFamily:"Barlow Condensed,sans-serif",fontSize:13,letterSpacing:"0.12em"}}>ENTER A RACE ID ABOVE AND CLICK LOAD</div>
+              <div style={{display:"flex",flexDirection:"column",gap:6,width:"100%",maxWidth:320}}>
+                <div style={{fontFamily:"Barlow Condensed,sans-serif",fontSize:10,letterSpacing:"0.14em",color:"#1e3a5f",marginBottom:4}}>PASS2PASS 2025 — AVAILABLE RACES</div>
+                {[["Hundred","1367"],["Ultra","1368"],["Marathon","1369"],["Challenge","1370"],["Lite","1371"],["Dash","1372"]].map(([name,id])=>(
+                  <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 12px",background:"rgba(30,58,95,0.18)",borderRadius:4,cursor:"pointer"}}
+                    onClick={()=>{setRaceInput(id);setRaceId(parseInt(id));setElevation({});setCourseProfile([]);setCpDistances({});loadRace(parseInt(id),topN);}}>
+                    <span style={{fontFamily:"Barlow Condensed,sans-serif",fontSize:13,letterSpacing:"0.08em",color:"#e2e8f0"}}>{name}</span>
+                    <span style={{fontFamily:"JetBrains Mono,monospace",fontSize:10,color:"#638EB0"}}>ID {id}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 
