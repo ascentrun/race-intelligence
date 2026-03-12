@@ -71,8 +71,8 @@ function Spinner(){
 
 // ── Main App ──────────────────────────────────────────────────────────────────
 function App(){
-  const [raceId,setRaceId]       = useState(DEFAULT_RACE_ID);
-  const [raceInput,setRaceInput] = useState(String(DEFAULT_RACE_ID));
+  const [raceId,setRaceId]       = useState(null);
+  const [raceInput,setRaceInput] = useState("");
   const [topN,setTopN]           = useState(25);
   const [phase,setPhase]         = useState("idle");
   const [phaseMsg,setPhaseMsg]   = useState("");
@@ -142,10 +142,11 @@ function App(){
     if(prof?.length)setCourseProfile(prof);
   },[]);
 
-  useEffect(()=>{loadRace(DEFAULT_RACE_ID,topN);},[]);
+  // No auto-load — start on landing page
 
   function handleLoad(){const id=parseInt(raceInput,10);if(!id)return;setRaceId(id);setElevation({});setCourseProfile([]);setCpDistances({});loadRace(id,topN);}
   function handleRefresh(){dbClear(raceId);loadRace(raceId,topN,true);}
+  function handleHome(){setRaceId(null);setRaceInput("");setAthletes({});setLeaderboard([]);setElevation({});setCourseProfile([]);setCpDistances({});setPhase("done");setRaceLabel("Pass2Pass Ultra Trail");}
 
   // ── Ordered athletes with cpMap ──────────────────────────────────────────
   const orderedAthletes=useMemo(()=>
@@ -372,6 +373,7 @@ function App(){
               </select>
               <button onClick={handleLoad} style={S.btn}>LOAD</button>
               <button onClick={handleRefresh} style={S.btnSm} title="Force refresh">↻</button>
+              <button onClick={handleHome} style={S.btnSm} title="Home">⌂</button>
             </div>
             <div style={S.pill}>
               <span style={{color:!isLoading&&loadedCount>0?"#22c55e":"#f59e0b",fontFamily:"JetBrains Mono,monospace",fontSize:18,fontWeight:700}}>
